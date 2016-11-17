@@ -4,6 +4,7 @@ import smartgetenv as _e
 SECRET_KEY = _e.get_env("SECRET_KEY")
 
 TRACKERS = _e.get_list("TRACKERS", [
+    "udp://bt.songbee.net:6969/announce",
     "http://bt.songbee.net/announce",
     "udp://tracker.openbittorrent.com:80/announce",
     "udp://tracker.leechers-paradise.org:6969/announce",
