@@ -5,6 +5,8 @@ A torrent server, generating torrent files on the fly and serving some statistic
 
 ## Installing
 
+Please note that you'll also need to run your own torrent tracker for this to work. We're running an open instance at `http://bt.songbee.net/announce` / `udp://bt.songbee.net:6969/announce` (hardcoded for now) but please don't use it for anything serious (and illegal! :). An easy start is to run [opentracker in Docker](https://github.com/Lednerb/opentracker-docker).
+
 ```bash
 docker-compose run web flask initdb
 docker-compose up
