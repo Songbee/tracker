@@ -6,3 +6,4 @@ SQLAlchemy-Utils==0.32.9
 psycopg2
 https://github.com/Songbee/better-bencode/archive/0bb114b9875fac1a6829e0a7bd8ffb933c66c525.tar.gz
 requests
+smartgetenv

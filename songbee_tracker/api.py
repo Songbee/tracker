@@ -80,9 +80,12 @@ bp.add_url_rule('/releases/<id>',
 
 class TorrentView(MethodView):
     def get(self, id):
-        t = Release.query.get_or_404(id).to_torrent()
+        r = Release.query.get_or_404(id)
+        t = r.to_torrent()
+        filename = str(r.id) + ".torrent"
         return bencode.dumps(t), 200, {
-            "Content-Type": "application/x-bittorrent"
+            "Content-Type": "application/x-bittorrent",
+            "Content-Disposition": "attachment; filename=%s" % filename
         }
 
 bp.add_url_rule('/releases/<id>/torrent',

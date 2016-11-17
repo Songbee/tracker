@@ -1,4 +1,3 @@
-import random
 import uuid
 import hashlib
 from collections import defaultdict
@@ -9,29 +8,12 @@ from sqlalchemy_searchable import make_searchable
 from sqlalchemy_utils import ScalarListType, UUIDType, TSVectorType
 from better_bencode import _pure as bencode
 
+from . import config
+
 db = SQLAlchemy()
 
 
 make_searchable()
-
-
-PRIMARY_TRACKER = "http://bt.songbee.net/announce"
-
-TRACKERS = [
-    "udp://tracker.leechers-paradise.org:6969/announce",
-    "udp://IPv6.leechers-paradise.org:6969/announce",
-    "udp://zer0day.ch:1337",
-    "udp://tracker.pirateparty.gr:6969/announce",
-    "udp://tracker.internetwarriors.net:1337/announce",
-    "udp://tracker.leechers-paradise.org:6969/announce",
-    "udp://tracker.coppersurfer.tk:6969/announce",
-    "udp://exodus.desync.com:6969/announce",
-    "udp://tracker.openbittorrent.com:80/announce",
-    "udp://tracker.sktorrent.net:6969/announce",
-    "udp://tracker.zer0day.to:1337/announce",
-]
-
-SCRAPE_URL = "http://bt.songbee.net/scrape"
 
 
 class Release(db.Model):
@@ -55,23 +37,24 @@ class Release(db.Model):
         """
         Return a dict which, when bencoded, can be used as a .torrent file.
         """
-        announce = [PRIMARY_TRACKER] + random.sample(TRACKERS, 4)
+
+        announce = config.TRACKERS
         return {
             "announce": announce[0],
             "announce-list": [[ann] for ann in announce],
-            "comment": "https://tracker.songbee.net/",
+            "comment": config.TORRENT_COMMENT,
             "created by": "Songbee Tracker/0.0.0",
             # "creation date": <unix timestamp>,
             "encoding": "UTF-8",
             "info": self.info,
-            "publisher": "songbee.net",
-            "publisher-url": "https://tracker.songbee.net/",
+            "publisher": config.TORRENT_PUBLISHER,
+            "publisher-url": config.TORRENT_PUBLISHER_URL,
             "x-songbee": {
                 "id": str(self.id),
                 "title": self.title or "",
                 "artist": self.artist or "",
                 "tracks": self.tracks,
-                "tracker": "https://tracker.songbee.net/",
+                "tracker": config.TORRENT_PUBLISHER_URL,
             }
         }
 
@@ -80,6 +63,7 @@ class Release(db.Model):
         """
         Make a Release object from torrent (optionally bencoded).
         """
+
         release = cls(**kwargs)
         if not isinstance(torrent, dict):
             torrent = bencode.loads(torrent)
@@ -113,7 +97,7 @@ class Release(db.Model):
         info_hash = self.infohash.digest()
         file = defaultdict(lambda: None)
         try:
-            r = requests.get(SCRAPE_URL, params={"info_hash": info_hash},
+            r = requests.get(config.SCRAPE_URL, params={"info_hash": info_hash},
                              timeout=2)
             b = bencode.loads(r.content)
             file = b[b"files"].get(info_hash, file)

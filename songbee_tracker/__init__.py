@@ -4,12 +4,11 @@ import click
 from .models import db
 from .api import bp as api_bp
 from .admin import admin
+from . import config
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgres://postgres@db"
-app.debug = True
-app.secret_key = "FOOBAR"
+app.config.from_object(config)
 
 db.init_app(app)
 app.register_blueprint(api_bp, url_prefix="/api/v1")

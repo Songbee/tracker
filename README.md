@@ -21,6 +21,8 @@ virtualenv -p python3.5 venv
 . venv/bin/activate
 pip install -r requirements.txt
 export FLASK_APP="songbee_tracker/__init__.py"
+export SECRET_KEY="foo"
+# See config.py for more configuration options
 flask run
 ```
 
