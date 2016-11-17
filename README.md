@@ -93,7 +93,7 @@ $ http get http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da84
 
 Let's add some metainfo now:
 
-```
+```bash
 $ http patch http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da84304f0 \
     --json artist=Pendulum title=Immersion
 
@@ -112,7 +112,7 @@ $ http patch http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da
 
 Looks great! Except the `stats` field, it's a bit empty. Let's change that.
 
-```
+```bash
 $ http get http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da84304f0/torrent > my-new.torrent
 $ qbittorrent my-new.torrent &  # your favourite torrent client here
 
