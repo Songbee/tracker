@@ -1,19 +1,16 @@
-import uuid
 import hashlib
+import json
+import uuid
 from collections import defaultdict
 
 import requests
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_searchable import make_searchable
-from sqlalchemy_utils import ScalarListType, UUIDType, TSVectorType
+from sqlalchemy_utils import UUIDType, JSONType
 from better_bencode import _pure as bencode
 
 from . import config
 
 db = SQLAlchemy()
-
-
-make_searchable()
 
 
 class Release(db.Model):
@@ -23,15 +20,10 @@ class Release(db.Model):
 
     __tablename__ = "releases"
     id = db.Column(UUIDType, primary_key=True, default=uuid.uuid1)
-    title = db.Column(db.Unicode(255))
-    artist = db.Column(db.Unicode(255))
-    external_links = db.Column(ScalarListType, doc='["{type}:{urn}", ...]')
+    meta = db.Column(JSONType, default=dict)
     info = db.Column(db.PickleType, default=dict)
-    tracks = db.Column(db.PickleType, default=dict,
-                       doc='{"{filename}": {"title": "{title}", ...}, ...}')
 
     _track_names = db.Column(db.UnicodeText, doc="For search vector only")
-    search_vector = db.Column(TSVectorType("title", "artist", "_track_names"))
 
     def to_torrent(self):
         """
@@ -51,10 +43,7 @@ class Release(db.Model):
             "publisher-url": config.TORRENT_PUBLISHER_URL,
             "x-songbee": {
                 "id": str(self.id),
-                "title": self.title or "",
-                "artist": self.artist or "",
-                "tracks": self.tracks,
-                "tracker": config.TORRENT_PUBLISHER_URL,
+                "meta": json.dumps(self.meta),
             }
         }
 

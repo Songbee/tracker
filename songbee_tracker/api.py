@@ -5,6 +5,7 @@ from sqlalchemy_searchable import search
 from better_bencode import _pure as bencode
 
 from .models import db, Release
+from .serializers import ReleaseSerializer
 
 
 bp = Blueprint("api_v1", __name__)
@@ -20,25 +21,16 @@ class ReleasesView(MethodView):
             # latest additions
             pass
 
-        return jsonify([{
-            "id": str(r.id),
-            "title": r.title,
-            "artist": r.artist,
-            "tracks": [t["title"] for t in r.tracks.values()],
-            "stats": r.stats,
-        } for r in query.limit(10).all()])  # TODO: paginate
+        return jsonify([
+            ReleaseSerializer.dump(r)
+            for r in query.limit(10).all()  # TODO: paginate
+        ])
 
     def post(self):
         r = Release.from_torrent(request.files["torrent"].read())
         db.session.add(r)
         db.session.commit()
-        return jsonify({
-            "id": str(r.id),
-            "title": r.title,
-            "artist": r.artist,
-            "tracks": [t["title"] for t in r.tracks.values()],
-            "stats": r.stats,
-        }), 201
+        return jsonify(ReleaseSerializer.dump(r)), 201
 
 bp.add_url_rule('/releases',
                 view_func=ReleasesView.as_view("releases"))
@@ -47,32 +39,12 @@ bp.add_url_rule('/releases',
 class ReleaseView(MethodView):
     def get(self, id):
         r = Release.query.get_or_404(id)
-
-        return jsonify({
-            "id": str(r.id),
-            "title": r.title,
-            "artist": r.artist,
-            "tracks": [t["title"] for t in r.tracks.values()],
-            "stats": r.stats,
-        })
+        return jsonify(ReleaseSerializer.dump(r))
 
     def patch(self, id):
         r = Release.query.get_or_404(id)
-
-        if "title" in request.json:
-            r.title = request.json["title"]
-        if "artist" in request.json:
-            r.title = request.json["artist"]
-        if "tracks" in request.json:
-            r.title = request.json["tracks"]
-
-        return jsonify({
-            "id": str(r.id),
-            "title": r.title,
-            "artist": r.artist,
-            "tracks": [t["title"] for t in r.tracks.values()],
-            "stats": r.stats,
-        })
+        ReleaseSerializer.update(r, request.json)
+        return ReleaseSerializer.dump(r)
 
 bp.add_url_rule('/releases/<id>',
                 view_func=ReleaseView.as_view("release"))
