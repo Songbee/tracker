@@ -51,3 +51,4 @@ class ReleaseSerializer(Serializer):
     infohash = LambdaField(lambda x: x.hexdigest())
     meta = fields.DictField(validators=[
         JSONSchemaValidator(METAINFO_SCHEMA)])
+    stats = fields.DictField(readonly=True)
