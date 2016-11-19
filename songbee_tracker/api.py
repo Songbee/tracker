@@ -44,7 +44,10 @@ class ReleaseView(MethodView):
     def patch(self, id):
         r = Release.query.get_or_404(id)
         ReleaseSerializer.update(r, request.json)
-        return ReleaseSerializer.dump(r)
+        r.update_search_vector()
+        db.session.add(r)
+        db.session.commit()
+        return jsonify(ReleaseSerializer.dump(r))
 
 bp.add_url_rule('/releases/<id>',
                 view_func=ReleaseView.as_view("release"))

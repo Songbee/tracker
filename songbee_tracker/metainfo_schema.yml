@@ -13,8 +13,7 @@ properties:
         artists:
           type: array
           items: { type: string }
-        filename:
-          type: string
+        filename: { type: string }
       required:
         - title
         - artists

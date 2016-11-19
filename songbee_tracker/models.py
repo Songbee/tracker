@@ -4,13 +4,21 @@ import uuid
 from collections import defaultdict
 
 import requests
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_utils import UUIDType, JSONType
+import sqlalchemy as sa
+from sqlalchemy import func
+from flask_sqlalchemy import SQLAlchemy, BaseQuery
+from sqlalchemy_utils import UUIDType, JSONType, TSVectorType
+from sqlalchemy_searchable import make_searchable, SearchQueryMixin
 from better_bencode import _pure as bencode
 
 from . import config
 
 db = SQLAlchemy()
+# make_searchable()
+
+
+class ReleaseQuery(BaseQuery, SearchQueryMixin):
+    pass
 
 
 class Release(db.Model):
@@ -19,11 +27,13 @@ class Release(db.Model):
     """
 
     __tablename__ = "releases"
+    query_class = ReleaseQuery
+
     id = db.Column(UUIDType, primary_key=True, default=uuid.uuid1)
     meta = db.Column(JSONType, default=dict)
     info = db.Column(db.PickleType, default=dict)
+    search_vector = db.Column(TSVectorType())
 
-    _track_names = db.Column(db.UnicodeText, doc="For search vector only")
 
     def to_torrent(self):
         """
@@ -98,3 +108,18 @@ class Release(db.Model):
             "downloaded": file[b"downloaded"],
             "incomplete": file[b"incomplete"],
         }
+
+    def update_search_vector(self):
+        text = " ".join(list(filter(lambda x: x is not None, [
+                self.meta.get("title", "memes"),
+                self.meta.get("artist"),
+            ])) + [
+                track.get("title", "") + " " + " ".join(track.get("artists", []))
+                for track in self.meta.get("tracks", [])
+            ])
+        self.search_vector = db.func.to_tsvector(text)
+
+    def __repr__(self):
+        return "<Release %s by %s>" % (
+            self.meta.get("title", "(none)"),
+            self.meta.get("artist", "(none)"))
