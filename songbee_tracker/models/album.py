@@ -7,12 +7,14 @@ class Album(db.Model):
 
     id = db.Column(UUIDType, primary_key=True, default=uuid.uuid1)
     title = db.Column(db.String)
-    artist = db.Column(db.String)
     tracks = db.Column(JSONType, default=list)
     search_vector = db.Column(TSVectorType())
 
     torrent_id = db.Column(db.String(40), db.ForeignKey("torrents.id"))
     torrent = db.relationship("Torrent", back_populates="albums")
+
+    artist_id = db.Column(UUIDType, db.ForeignKey("artists.id"))
+    artist = db.relationship("Artist", back_populates="albums")
 
     def update_search_vector(self):
         words = [self.title, self.artist.name, (
@@ -23,6 +25,4 @@ class Album(db.Model):
         self.search_vector = db.func.to_tsvector(text)
 
     def __repr__(self):
-        return "<Album %s by %s>" % (
-            self.meta.get("title", "Untitled"),
-            self.meta.get("artist", "Unknown Artist"))
+        return "<Album %s by %s>" % (self.title, self.artist.name)
