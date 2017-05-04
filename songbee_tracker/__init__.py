@@ -1,4 +1,4 @@
-from flask import Flask
+from flask_api import FlaskAPI
 import click
 
 from .models import db
@@ -9,7 +9,7 @@ from . import config
 __version__ = "0.1.0"
 
 
-app = Flask(__name__)
+app = FlaskAPI(__name__)
 app.config.from_object(config)
 
 db.init_app(app)

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from flask.views import MethodView
 from sqlalchemy_searchable import search
 
@@ -21,10 +21,10 @@ class AlbumsView(MethodView):
             # latest additions
             pass
 
-        return jsonify([
+        return [
             AlbumSerializer.dump(album)
             for album in query.limit(10).all()  # TODO: paginate
-        ])
+        ]
 
 bp.add_url_rule("/albums", view_func=AlbumsView.as_view("albums"))
 
@@ -32,7 +32,7 @@ bp.add_url_rule("/albums", view_func=AlbumsView.as_view("albums"))
 class AlbumView(MethodView):
     def get(self, id):
         album = Album.query.get_or_404(id)
-        return jsonify(AlbumSerializer.dump(r))
+        return AlbumSerializer.dump(r)
 
     def patch(self, id):
         album = Album.query.get_or_404(id)
@@ -40,7 +40,7 @@ class AlbumView(MethodView):
         album.update_search_vector()
         db.session.add(r)
         db.session.commit()
-        return jsonify(AlbumSerializer.dump(r))
+        return AlbumSerializer.dump(r)
 
 bp.add_url_rule("/albums/<id>", view_func=AlbumView.as_view("album"))
 
