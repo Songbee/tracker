@@ -5,9 +5,9 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.helpers import (get_form_data, validate_form_on_submit,
                                  get_redirect_target, flash_errors)
 
-from .models import db, Album
+from .models import db, Album, Artist
 
-admin = Admin(name='Songbee', template_mode='bootstrap3', url='/_/admin')
+admin = Admin(name='Songbee', template_mode='bootstrap3', url='/_admin')
 
 
 class ReadonlyMixin:
@@ -27,4 +27,5 @@ def mix(*classes):
 #         return self.scaffold_list_columns() + ["infohash"]
 
 
+admin.add_view(ModelView(Artist, db.session))
 admin.add_view(ModelView(Album, db.session))

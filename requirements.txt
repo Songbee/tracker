@@ -8,7 +8,7 @@ psycopg2
 https://github.com/Songbee/better-bencode/archive/0bb114b9875fac1a6829e0a7bd8ffb933c66c525.tar.gz
 requests
 smartgetenv
-beerializer==0.1.5
+https://github.com/Songbee/beerializer/archive/1b04b82c5ab93f1e32e9f4794997f4ba79920fa0.tar.gz
 # beerializer_sqlalchemy==0.1.6
 jsonschema
 ruamel.yaml

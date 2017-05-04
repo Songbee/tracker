@@ -23,6 +23,7 @@ class AlbumsView(APIMethodView):
 
     def post(self):
         album = AlbumSerializer.load(request.data)
+        album.update_search_vector()
         db.session.add(album)
         db.session.commit()
         return AlbumSerializer.dump(album), 201
@@ -35,7 +36,7 @@ class AlbumView(APIMethodView):
 
     def patch(self, id):
         album = Album.query.get_or_404(id)
-        AlbumSerializer.update(album, request.json)
+        AlbumSerializer.update(album, request.data)
         album.update_search_vector()
         db.session.add(album)
         db.session.commit()

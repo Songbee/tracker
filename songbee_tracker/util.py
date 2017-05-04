@@ -1,7 +1,11 @@
-import codecs
 from base64 import b32decode, b16encode
 
+from flask import url_for
 from flask.views import MethodView
+
+
+def external_url_for(endpoint, **values):
+    return url_for(endpoint, _external=True, **values)
 
 
 def b32_to_b16(s):
