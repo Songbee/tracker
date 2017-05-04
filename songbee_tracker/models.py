@@ -17,25 +17,15 @@ db = SQLAlchemy()
 # make_searchable()
 
 
-class ReleaseQuery(BaseQuery, SearchQueryMixin):
-    pass
+class Torrent(db.Model):
+    __tablename__ = "torrents"
 
-
-class Release(db.Model):
-    """
-    An album or a single or something. Also, a torrent.
-    """
-
-    __tablename__ = "releases"
-    query_class = ReleaseQuery
-
-    id = db.Column(UUIDType, primary_key=True, default=uuid.uuid1)
-    meta = db.Column(JSONType, default=dict)
+    id = db.Column(db.String(40), primary_key=True)
     info = db.Column(db.PickleType, default=dict)
-    search_vector = db.Column(TSVectorType())
-
-
-    def to_torrent(self):
+    
+    albums = db.relationship("Album", back_populates="torrent")
+    
+    def to_file(self):
         """
         Return a dict which, when bencoded, can be used as a .torrent file.
         """
@@ -51,35 +41,30 @@ class Release(db.Model):
             "info": self.info,
             "publisher": config.TORRENT_PUBLISHER,
             "publisher-url": config.TORRENT_PUBLISHER_URL,
-            "x-songbee": {
-                "id": str(self.id),
-                "meta": json.dumps(self.meta),
-            }
         }
 
     @classmethod
-    def from_torrent(cls, torrent, **kwargs):
+    def from_file(cls, file, **kwargs):
         """
-        Make a Release object from torrent (optionally bencoded).
+        Make a Torrent object from .torrent (optionally bencoded).
         """
 
-        release = cls(**kwargs)
+        torrent = cls(**kwargs)
         if not isinstance(torrent, dict):
-            torrent = bencode.loads(torrent)
+            file = bencode.loads(file)
 
-        if "info" in torrent:
-            release.info = torrent["info"]
-        elif b"info" in torrent:
-            release.info = torrent[b"info"]
+        if "info" in file:
+            torrent.info = file["info"]
+        elif b"info" in file:
+            torrent.info = file[b"info"]
         else:
             raise ValueError("torrent has no 'info' field")
+        
+        # Set id to infohash in base16
+        torrent.id = hashlib.sha1(bencode.dumps(torrent.info)).hexdigest()
 
         return release
-
-    @property
-    def infohash(self):
-        return hashlib.sha1(bencode.dumps(self.info))
-
+    
     @property
     def stats(self):
         """
@@ -109,17 +94,34 @@ class Release(db.Model):
             "incomplete": file[b"incomplete"],
         }
 
+
+
+class SearchQuery(BaseQuery, SearchQueryMixin):
+    pass
+
+
+class Album(db.Model):
+    __tablename__ = "albums"
+    query_class = SearchQuery
+
+    id = db.Column(UUIDType, primary_key=True, default=uuid.uuid1)
+    title = db.Column(db.String)
+    artist = db.Column(db.String)
+    tracks = db.Column(JSONType, default=list)
+    search_vector = db.Column(TSVectorType())
+    
+    torrent_id = db.Column(db.String(40), db.ForeignKey("torrents.id"))
+    torrent = db.relationship("Torrent", back_populates="albums")
+
     def update_search_vector(self):
-        text = " ".join(list(filter(lambda x: x is not None, [
-                self.meta.get("title", "memes"),
-                self.meta.get("artist"),
-            ])) + [
-                track.get("title", "") + " " + " ".join(track.get("artists", []))
-                for track in self.meta.get("tracks", [])
-            ])
+        words = [self.title, self.artist.name, (
+            [track.get("title", []), track.get("artists", [])]
+            for track in self.tracks
+        )]
+        text = " ".join(flatten(words))
         self.search_vector = db.func.to_tsvector(text)
 
     def __repr__(self):
-        return "<Release %s by %s>" % (
-            self.meta.get("title", "(none)"),
-            self.meta.get("artist", "(none)"))
+        return "<Album %s by %s>" % (
+            self.meta.get("title", "Untitled"),
+            self.meta.get("artist", "Unknown Artist"))

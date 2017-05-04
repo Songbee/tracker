@@ -7,8 +7,22 @@ services:
     command: flask run -h 0.0.0.0 -p 5000
     environment:
       FLASK_DEBUG: 1
-      SECRET_KEY: foo
       DATABASE_URL: postgres://postgres@db
+      
+      # Modify this in production!
+      SECRET_KEY: foo
+      
+      # See http://www.yaml.org/spec/1.2/spec.html#id2793979
+      BANNER: |2
+                                            .
+                                           /
+                 .  .-._..  .-.   .-.     /-.    .-.   .-.
+                / \(   )  )/   ) (   )   /   ) ./.-'_./.-'_
+               / ._)`-'  '/   (   `-/-'./`--'`-(__.' (__.'
+              /   songbee.net  `-._/   /  {version}
+          ---/----).---..--.  .--.    /-.   .-.  ).--.
+            /    /     (   | (       / )  ./.-'_/
+           /    /       `--'-'`---'_/   \ (__.'/
     volumes:
       - .:/code
     ports:

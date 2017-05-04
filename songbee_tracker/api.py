@@ -4,16 +4,16 @@ from sqlalchemy_searchable import search
 
 from better_bencode import _pure as bencode
 
-from .models import db, Release
-from .serializers import ReleaseSerializer
+from .models import db, Album, Torrent
+from .serializers import AlbumSerializer
 
 
 bp = Blueprint("api_v1", __name__)
 
 
-class ReleasesView(MethodView):
+class AlbumsView(MethodView):
     def get(self):
-        query = Release.query
+        query = Album.query
 
         if "q" in request.args:
             query = search(query, request.args["q"])
@@ -22,46 +22,43 @@ class ReleasesView(MethodView):
             pass
 
         return jsonify([
-            ReleaseSerializer.dump(r)
-            for r in query.limit(10).all()  # TODO: paginate
+            AlbumSerializer.dump(album)
+            for album in query.limit(10).all()  # TODO: paginate
         ])
 
-    def post(self):
-        r = Release.from_torrent(request.files["torrent"].read())
-        db.session.add(r)
-        db.session.commit()
-        return jsonify(ReleaseSerializer.dump(r)), 201
-
-bp.add_url_rule('/releases',
-                view_func=ReleasesView.as_view("releases"))
+bp.add_url_rule("/albums", view_func=AlbumsView.as_view("albums"))
 
 
-class ReleaseView(MethodView):
+class AlbumView(MethodView):
     def get(self, id):
-        r = Release.query.get_or_404(id)
-        return jsonify(ReleaseSerializer.dump(r))
+        album = Album.query.get_or_404(id)
+        return jsonify(AlbumSerializer.dump(r))
 
     def patch(self, id):
-        r = Release.query.get_or_404(id)
-        ReleaseSerializer.update(r, request.json)
-        r.update_search_vector()
+        album = Album.query.get_or_404(id)
+        AlbumSerializer.update(r, request.json)
+        album.update_search_vector()
         db.session.add(r)
         db.session.commit()
-        return jsonify(ReleaseSerializer.dump(r))
+        return jsonify(AlbumSerializer.dump(r))
 
-bp.add_url_rule('/releases/<id>',
-                view_func=ReleaseView.as_view("release"))
+bp.add_url_rule("/albums/<id>", view_func=AlbumView.as_view("album"))
 
 
 class TorrentView(MethodView):
-    def get(self, id):
-        r = Release.query.get_or_404(id)
-        t = r.to_torrent()
+    def get(self, infohash):
+        if len(infohash) < 40:
+            try:
+                infohash = b32_to_b16(infohash)
+            except:
+                pass  # TODO: 404
+
+        r = Torrent.query.get_or_404(infohash)
+        t = r.to_file()
         filename = str(r.id) + ".torrent"
         return bencode.dumps(t), 200, {
             "Content-Type": "application/x-bittorrent",
             "Content-Disposition": "attachment; filename=%s" % filename
         }
 
-bp.add_url_rule('/releases/<id>/torrent',
-                view_func=TorrentView.as_view("torrent"))
+bp.add_url_rule("/torrents/<infohash>", view_func=TorrentView.as_view("torrent"))

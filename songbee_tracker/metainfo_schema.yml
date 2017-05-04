@@ -1,24 +1,15 @@
 "$schema": http://json-schema.org/draft-04/schema#
 
-type: object
-properties:
-  title: { type: string }
-  artist: { type: string }
-  tracks:
-    type: array
-    items:
-      type: object
-      properties:
-        title: { type: string }
-        artists:
-          type: array
-          items: { type: string }
-        filename: { type: string }
-      required:
-        - title
-        - artists
-        - filename
-required:
-  - title
-  - artist
-  - tracks
+type: array
+items:
+  type: object
+  properties:
+    title: { type: string }
+    artists:
+      type: array
+      items: { type: string }
+    filename: { type: string }
+  required:
+    - title
+    - artists
+    - filename

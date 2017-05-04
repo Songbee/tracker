@@ -5,7 +5,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.helpers import (get_form_data, validate_form_on_submit,
                                  get_redirect_target, flash_errors)
 
-from .models import db, Release
+from .models import db, Album
 
 admin = Admin(name='Songbee', template_mode='bootstrap3', url='/_/admin')
 
@@ -21,12 +21,10 @@ def mix(*classes):
     return Mixed
 
 
-class ReleaseView(ModelView):
-    column_exclude_list = ["info"]
-
-    @property
-    def column_list(self):
-        return self.scaffold_list_columns() + ["infohash"]
+# class AlbumView(ModelView):
+#     @property
+#     def column_list(self):
+#         return self.scaffold_list_columns() + ["infohash"]
 
 
-admin.add_view(ReleaseView(Release, db.session))
+admin.add_view(ModelView(Album, db.session))

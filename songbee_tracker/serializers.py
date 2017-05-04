@@ -4,7 +4,7 @@ import jsonschema
 from ruamel import yaml
 from beerializer import fields, Serializer, ValidationError
 
-from .models import Release
+from .models import Album
 
 METAINFO_SCHEMA = yaml.load(
     (Path(__file__).parent / "metainfo_schema.yml").open())
@@ -43,12 +43,11 @@ class LambdaField(fields.Field):
         return self._object_to_data(obj)
 
 
-class ReleaseSerializer(Serializer):
+class AlbumSerializer(Serializer):
     class Meta:
-        model = Release
+        model = Album
 
     id = fields.UuidField(readonly=True)
-    infohash = LambdaField(lambda x: x.hexdigest())
-    meta = fields.DictField(validators=[
-        JSONSchemaValidator(METAINFO_SCHEMA)])
-    stats = fields.DictField(readonly=True)
+    title = fields.StringField()
+    artist = fields.StringField()
+    tracks = fields.DictField(validators=[JSONSchemaValidator(METAINFO_SCHEMA)])

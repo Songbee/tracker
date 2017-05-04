@@ -6,6 +6,8 @@ from .api import bp as api_bp
 from .admin import admin
 from . import config
 
+__version__ = "0.1.0"
+
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -17,12 +19,8 @@ admin.init_app(app)
 
 @app.route("/")
 def index():
-    return """
-    <form action="/api/v1/releases" method="POST" enctype="multipart/form-data">
-        <input type="file" name="torrent"><br>
-        <input type="submit">
-    </form>
-    """
+    banner = app.config["BANNER"].format(version=__version__)
+    return banner, 200, {"Content-Type": "text/plain"}
 
 
 @app.cli.command()
