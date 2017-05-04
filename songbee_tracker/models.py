@@ -63,7 +63,7 @@ class Torrent(db.Model):
         # Set id to infohash in base16
         torrent.id = hashlib.sha1(bencode.dumps(torrent.info)).hexdigest()
 
-        return release
+        return torrent
     
     @property
     def stats(self):
