@@ -1,3 +1,11 @@
+import hashlib
+from collections import defaultdict
+
+from flask import current_app as app
+from better_bencode import _pure as bencode
+
+import requests
+
 from . import db
 
 
@@ -6,25 +14,25 @@ class Torrent(db.Model):
 
     id = db.Column(db.String(40), primary_key=True)
     info = db.Column(db.PickleType, default=dict)
-    
+
     albums = db.relationship("Album", back_populates="torrent")
-    
+
     def to_file(self):
         """
         Return a dict which, when bencoded, can be used as a .torrent file.
         """
 
-        announce = config.TRACKERS
+        announce = app.config["TRACKERS"]
         return {
             "announce": announce[0],
             "announce-list": [[ann] for ann in announce],
-            "comment": config.TORRENT_COMMENT,
+            "comment": app.config["TORRENT_COMMENT"],
             "created by": "Songbee Tracker/0.0.0",
             # "creation date": <unix timestamp>,
             "encoding": "UTF-8",
             "info": self.info,
-            "publisher": config.TORRENT_PUBLISHER,
-            "publisher-url": config.TORRENT_PUBLISHER_URL,
+            "publisher": app.config["TORRENT_PUBLISHER"],
+            "publisher-url": app.config["TORRENT_PUBLISHER_URL"],
         }
 
     @classmethod
@@ -43,12 +51,12 @@ class Torrent(db.Model):
             torrent.info = file[b"info"]
         else:
             raise ValueError("torrent has no 'info' field")
-        
+
         # Set id to infohash in base16
         torrent.id = hashlib.sha1(bencode.dumps(torrent.info)).hexdigest()
 
         return torrent
-    
+
     @property
     def stats(self):
         """
@@ -65,7 +73,8 @@ class Torrent(db.Model):
         info_hash = self.infohash.digest()
         file = defaultdict(lambda: None)
         try:
-            r = requests.get(config.SCRAPE_URL, params={"info_hash": info_hash},
+            r = requests.get(app.config["SCRAPE_URL"],
+                             params={"info_hash": info_hash},
                              timeout=2)
             b = bencode.loads(r.content)
             file = b[b"files"].get(info_hash, file)

@@ -1,4 +1,9 @@
+import uuid
+
+from sqlalchemy_utils import UUIDType, JSONType, TSVectorType
+
 from . import db, SearchQuery
+from ..util import flatten
 
 
 class Album(db.Model):
