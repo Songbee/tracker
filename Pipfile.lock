@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "68b326aa6496314588a2da2f8aa6f4cfcd2ea63a378c8d093491c9f4c50d561a"
+            "sha256": "553c1c72c2ec62f975f5b90ce05f058e4cb5a29739aea892343a7652a2d96762"
         },
         "requires": {},
         "sources": [
@@ -24,13 +24,25 @@
             "hash": "sha256:fe3a96d99f22e293cd7e83d364de6cffd36573ef25db93d6e32102527a624bc5",
             "version": "==1.5.0"
         },
+        "Flask-Migrate": {
+            "hash": "sha256:331f1facf93712b6a3067eac382e645b1ef09e9a6d34da447acb6a3c293afd80",
+            "version": "==2.0.3"
+        },
         "Flask-SQLAlchemy": {
             "hash": "sha256:fa3bd6343de231b2b3376a276df6d331c63c766449b660fc04d375a1c21312ac",
             "version": "==2.2"
         },
+        "Flask-Script": {
+            "hash": "sha256:cef76eac751396355429a14c38967bb14d4973c53e07dec94af5cc8fb017107f",
+            "version": "==2.0.5"
+        },
         "Jinja2": {
             "hash": "sha256:2231bace0dfd8d2bf1e5d7e41239c06c9e0ded46e70cc1094a0aa64b0afeb054",
             "version": "==2.9.6"
+        },
+        "Mako": {
+            "hash": "sha256:48559ebd872a8e77f92005884b3d88ffae552812cdf17db6768e5c3be5ebbe0d",
+            "version": "==1.0.6"
         },
         "MarkupSafe": {
             "hash": "sha256:a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665",
@@ -56,6 +68,10 @@
             "hash": "sha256:918322630c58fa52b89e14c45de3ad78514e18928dac726060bb89cd647f6b83",
             "version": "==0.12.1"
         },
+        "alembic": {
+            "hash": "sha256:767cf6c8c4578f1f625f17bfbc8716a7d4f80a0c1efc7a9b72af30ad68954962",
+            "version": "==0.9.1"
+        },
         "click": {
             "hash": "sha256:29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d",
             "version": "==6.7"
@@ -63,6 +79,14 @@
         "decorator": {
             "hash": "sha256:73cbaadb8bc4e3c65fe1100773d56331a2d756cc0f5c7b9d8d5d5223fe04f600",
             "version": "==4.0.11"
+        },
+        "https://github.com/songbee/beerializer/archive/1b04b82c5ab93f1e32e9f4794997f4ba79920fa0.tar.gz": {
+            "hash": "sha256:2ec534ac77eb1129d8b68f93497daed5552ecbea3871e18e29a96da8b85dfa1d",
+            "version": "=="
+        },
+        "https://github.com/songbee/better-bencode/archive/0bb114b9875fac1a6829e0a7bd8ffb933c66c525.tar.gz": {
+            "hash": "sha256:e63dd8102e7283961cc8542d6bd075bcd6f1972266ff60e2282b33c421a04740",
+            "version": "=="
         },
         "itsdangerous": {
             "hash": "sha256:cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519",
@@ -79,6 +103,10 @@
         "pyparsing": {
             "hash": "sha256:fee43f17a9c4087e7ed1605bd6df994c6173c1e977d7ade7b651292fab2bd010",
             "version": "==2.2.0"
+        },
+        "python-editor": {
+            "hash": "sha256:a3c066acee22a1c94f63938341d4fb374e3fdd69366ed6603d7b24bed1efc565",
+            "version": "==1.0.3"
         },
         "requests": {
             "hash": "sha256:1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb",
