@@ -33,13 +33,21 @@ class URLField(fields.Field):
         return url_for(self.endpoint, _external=self.external, **kw)
 
 
+class ArtistMiniSerializer(Serializer):
+    class Meta:
+        model = Artist
+
+    id = URLField("api_v1.artist", name="url", attr=str)
+    name = fields.StringField()
+
+
 class AlbumSerializer(Serializer):
     class Meta:
         model = Album
 
     id = URLField("api_v1.album", name="url", attr=str)
     title = fields.StringField()
-    artist = URLField("api_v1.artist", name="artist_url")
+    artist = fields.ObjectField(ArtistMiniSerializer)
     artist_id = fields.UuidField(hidden=True)
     tracks = fields.Field(validators=[JSONSchemaValidator(TRACKS_SCHEMA)])
 

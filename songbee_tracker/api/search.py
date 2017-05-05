@@ -19,10 +19,10 @@ class SearchView(APIMethodView):
         return {
             "albums": [
                 AlbumSerializer.dump(album)
-                for album in albums.limit(10).all()  # TODO: paginate
+                for album in albums.limit(5).all()
             ],
             "artists": [
                 ArtistSerializer.dump(album)
-                for album in artists.limit(10).all()  # TODO: paginate
+                for album in artists.limit(5).all()
             ],
         }
