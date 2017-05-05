@@ -1,0 +1,122 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "68b326aa6496314588a2da2f8aa6f4cfcd2ea63a378c8d093491c9f4c50d561a"
+        },
+        "requires": {},
+        "sources": [
+            {
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "Flask": {
+            "hash": "sha256:6c3130c8927109a08225993e4e503de4ac4f2678678ae211b33b519c622a7242",
+            "version": "==0.12.1"
+        },
+        "Flask-API": {
+            "hash": "sha256:f23a4757d98f70d489c93ee38a57bd0255ff22bac027bf66f3567b1ac3ee7acb",
+            "version": "==0.7.1"
+        },
+        "Flask-Admin": {
+            "hash": "sha256:fe3a96d99f22e293cd7e83d364de6cffd36573ef25db93d6e32102527a624bc5",
+            "version": "==1.5.0"
+        },
+        "Flask-SQLAlchemy": {
+            "hash": "sha256:fa3bd6343de231b2b3376a276df6d331c63c766449b660fc04d375a1c21312ac",
+            "version": "==2.2"
+        },
+        "Jinja2": {
+            "hash": "sha256:2231bace0dfd8d2bf1e5d7e41239c06c9e0ded46e70cc1094a0aa64b0afeb054",
+            "version": "==2.9.6"
+        },
+        "MarkupSafe": {
+            "hash": "sha256:a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665",
+            "version": "==1.0"
+        },
+        "SQLAlchemy": {
+            "hash": "sha256:b65cdc73cd348448ef0164f6c77d45a9f27ca575d3c5d71ccc33adf684bc6ef0",
+            "version": "==1.1.9"
+        },
+        "SQLAlchemy-Searchable": {
+            "hash": "sha256:45257ddb89ef194e25a4c4f13ea360678ac5c1805cbf4871048f7f7e2359c90b",
+            "version": "==0.10.3"
+        },
+        "SQLAlchemy-Utils": {
+            "hash": "sha256:e74b0338f4d56dcb0cb57f1b4f5afee5b2ffe595dd5a68b62da66ea4a7399cce",
+            "version": "==0.32.14"
+        },
+        "WTForms": {
+            "hash": "sha256:ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f",
+            "version": "==2.1"
+        },
+        "Werkzeug": {
+            "hash": "sha256:918322630c58fa52b89e14c45de3ad78514e18928dac726060bb89cd647f6b83",
+            "version": "==0.12.1"
+        },
+        "click": {
+            "hash": "sha256:29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d",
+            "version": "==6.7"
+        },
+        "decorator": {
+            "hash": "sha256:73cbaadb8bc4e3c65fe1100773d56331a2d756cc0f5c7b9d8d5d5223fe04f600",
+            "version": "==4.0.11"
+        },
+        "itsdangerous": {
+            "hash": "sha256:cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519",
+            "version": "==0.24"
+        },
+        "jsonschema": {
+            "hash": "sha256:000e68abd33c972a5248544925a0cae7d1125f9bf6c58280d37546b946769a08",
+            "version": "==2.6.0"
+        },
+        "psycopg2": {
+            "hash": "sha256:9c9fe11f87c44e83620b2273f40338e3c25fdbfd34986dddc77e840e0acd25bc",
+            "version": "==2.7.1"
+        },
+        "pyparsing": {
+            "hash": "sha256:fee43f17a9c4087e7ed1605bd6df994c6173c1e977d7ade7b651292fab2bd010",
+            "version": "==2.2.0"
+        },
+        "requests": {
+            "hash": "sha256:1a720e8862a41aa22e339373b526f508ef0c8988baf48b84d3fc891a8e237efb",
+            "version": "==2.13.0"
+        },
+        "ruamel.yaml": {
+            "hash": "sha256:4edc97bb1cfc8188c1edd2553a740134a586159c8bb73e8dbc6df7fa29dbea3e",
+            "version": "==0.14.11"
+        },
+        "six": {
+            "hash": "sha256:0ff78c403d9bccf5a425a6d31a12aa6b47f1c21ca4dc2573a7e2f32a97335eb1",
+            "version": "==1.10.0"
+        },
+        "smartgetenv": {
+            "hash": "sha256:53d999da62b41683bbcea6f767f1efdc7f24360d2c0a702114970b97e02a2873",
+            "version": "==0.1.0"
+        },
+        "validators": {
+            "hash": "sha256:641501a0a41063605fe5185ef41ae0238842c2a8e9d91a5875d2a6a56cbc301e",
+            "version": "==0.11.3"
+        }
+    },
+    "develop": {
+        "flake8": {
+            "hash": "sha256:83905eadba99f73fbfe966598aaf1682b3eb6755d2263c5b33a4e8367d60b0d1",
+            "version": "==3.3.0"
+        },
+        "mccabe": {
+            "hash": "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42",
+            "version": "==0.6.1"
+        },
+        "pycodestyle": {
+            "hash": "sha256:6c4245ade1edfad79c3446fadfc96b0de2759662dc29d07d80a6f27ad1ca6ba9",
+            "version": "==2.3.1"
+        },
+        "pyflakes": {
+            "hash": "sha256:cc5eadfb38041f8366128786b4ca12700ed05bbf1403d808e89d57d67a3875a7",
+            "version": "==1.5.0"
+        }
+    }
+}

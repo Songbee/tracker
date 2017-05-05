@@ -8,8 +8,15 @@ A torrent server, generating torrent files on the fly and serving some statistic
 Please note that you'll also need to run your own torrent tracker for this to work. We're running an open instance at `http://bt.songbee.net/announce` / `udp://bt.songbee.net:6969/announce` (hardcoded for now) but please don't use it for anything serious (and illegal! :). An easy start is to run [opentracker in Docker](https://github.com/Lednerb/opentracker-docker).
 
 ```bash
-docker-compose run web flask initdb
-docker-compose up
+# Install dependencies and generate requirements.txt
+pipenv install --python python3
+pipenv run pipreq
+
+# Build and run the application
+docker-compose build web
+docker-compose run web flask db upgrade
+docker-compose up -d db
+docker-compose up web
 ```
 
 ### ...without Docker!
@@ -41,14 +48,14 @@ $ http post http://127.0.0.1:5000/api/v1/releases --form torrent@my.torrent
 # (this form is also available at http://127.0.0.1:5000/)
 
 {
-    "artist": "", 
-    "id": "deadface-3046-402b-8dc7-8d0da84304f0", 
+    "artist": "",
+    "id": "deadface-3046-402b-8dc7-8d0da84304f0",
     "stats": {
-        "complete": null, 
-        "downloaded": null, 
+        "complete": null,
+        "downloaded": null,
         "incomplete": null
-    }, 
-    "title": "", 
+    },
+    "title": "",
     "tracks": []
 }
 ```
@@ -60,14 +67,14 @@ $ http get http://127.0.0.1:5000/api/v1/releases
 
 [
     {
-        "artist": "", 
-        "id": "deadface-3046-402b-8dc7-8d0da84304f0", 
+        "artist": "",
+        "id": "deadface-3046-402b-8dc7-8d0da84304f0",
         "stats": {
-            "complete": null, 
-            "downloaded": null, 
+            "complete": null,
+            "downloaded": null,
             "incomplete": null
-        }, 
-        "title": "", 
+        },
+        "title": "",
         "tracks": []
     }
 ]
@@ -79,14 +86,14 @@ $ http get http://127.0.0.1:5000/api/v1/releases
 $ http get http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da84304f0
 
 {
-    "artist": "", 
-    "id": "deadface-3046-402b-8dc7-8d0da84304f0", 
+    "artist": "",
+    "id": "deadface-3046-402b-8dc7-8d0da84304f0",
     "stats": {
-        "complete": null, 
-        "downloaded": null, 
+        "complete": null,
+        "downloaded": null,
         "incomplete": null
-    }, 
-    "title": "", 
+    },
+    "title": "",
     "tracks": []
 }
 ```
@@ -98,14 +105,14 @@ $ http patch http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da
     --json artist=Pendulum title=Immersion
 
 {
-    "artist": "Pendulum", 
-    "id": "deadface-3046-402b-8dc7-8d0da84304f0", 
+    "artist": "Pendulum",
+    "id": "deadface-3046-402b-8dc7-8d0da84304f0",
     "stats": {
-        "complete": null, 
-        "downloaded": null, 
+        "complete": null,
+        "downloaded": null,
         "incomplete": null
-    }, 
-    "title": "Immersion", 
+    },
+    "title": "Immersion",
     "tracks": []
 }
 ```
@@ -119,14 +126,14 @@ $ qbittorrent my-new.torrent &  # your favourite torrent client here
 $ http get http://127.0.0.1:5000/api/v1/releases/deadface-3046-402b-8dc7-8d0da84304f0
 
 {
-    "artist": "Pendulum", 
-    "id": "deadface-3046-402b-8dc7-8d0da84304f0", 
+    "artist": "Pendulum",
+    "id": "deadface-3046-402b-8dc7-8d0da84304f0",
     "stats": {
-        "complete": 0, 
-        "downloaded": 0, 
+        "complete": 0,
+        "downloaded": 0,
         "incomplete": 1  // we're here!
-    }, 
-    "title": "Immersion", 
+    },
+    "title": "Immersion",
     "tracks": []
 }
 ```

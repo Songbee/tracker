@@ -4,3 +4,15 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "*"
+
+[packages]
+psycopg2 = "*"
+requests = "*"
+smartgetenv = "*"
+jsonschema = "*"
+"ruamel.yaml" = "*"
+Flask-API = "*"
+Flask-Admin = "*"
+Flask-SQLAlchemy = "*"
+SQLAlchemy-Searchable = "*"
+SQLAlchemy-Utils = "*"
